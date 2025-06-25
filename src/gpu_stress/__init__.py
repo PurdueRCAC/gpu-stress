@@ -24,8 +24,9 @@ import torch
 # Internal libs
 from gpu_stress.core import (
     DEFAULT_SIZE, DEFAULT_DEVICE, DEFAULT_TIME, 
-    cfg, log, handle_exception, parse_time, get_gpu_info
+    cfg, log, handle_exception, parse_time
 )
+from gpu_stress.smi import gpu_info
 
 # Public interface
 __all__ = [
@@ -86,7 +87,7 @@ class GPUStress(Application):
     def run(self: GPUStress) -> None:
         """Run program."""
         log.setLevel(level_by_name[self.log_level.upper()])
-        for info in get_gpu_info():
+        for info in gpu_info():
             log.info(info)
         log.info(f'Solving matrix (size={self.size}) for approx {self.runtime} on device {self.device}')
         device = torch.device(f'cuda:{self.device}')

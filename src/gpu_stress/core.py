@@ -6,13 +6,11 @@
 
 # Type annotations
 from __future__ import annotations
-from typing import Final, List
+from typing import Final
 
 # Standard libs
-import os
 import re
 import sys
-from subprocess import check_output
 from datetime import timedelta
 
 # External libs
@@ -24,7 +22,7 @@ from cmdkit.logging import Logger, level_by_name, logging_styles
 __all__ = [
     'default_config', 'DEFAULT_SIZE', 'DEFAULT_DEVICE', 'DEFAULT_TIME',
     'ctx', 'cfg', 'log', 
-    'handle_exception', 'parse_time', 'get_gpu_info',
+    'handle_exception', 'parse_time',
 ]
 
 
@@ -72,12 +70,3 @@ def parse_time(time_spec: str) -> timedelta:
             case 's':
                 return timedelta(seconds=value)
     raise ValueError(f'Invalid time specification: {time_spec!r}')
-
-
-def get_gpu_info() -> List[str]:
-    """Get GPU device information."""
-    try:
-        return check_output(['nvidia-smi', '--list-gpus']).decode('utf-8').strip().splitlines()
-    except Exception as exc:
-        raise RuntimeError(f"Failed to retrieve GPU information: {exc}") from exc
-
